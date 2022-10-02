@@ -80,7 +80,7 @@ const LernerProfileCreate = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
   };
-  console.log(profileInfo);
+
 
   return (
     <div>
