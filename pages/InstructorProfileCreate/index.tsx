@@ -4,31 +4,56 @@ import { useQuill } from "react-quilljs";
 import "quill/dist/quill.snow.css";
 import parse from "html-react-parser";
 
-
-
+type InputDataType = {
+  name: string;
+  mobile: string;
+  district: string;
+  gender: string;
+  dateOfBirth: string;
+  experience: string;
+  youTubeLink: string;
+  about: string;
+};
 
 const InstructorProfileCreate = () => {
   const disticts = address.allDistict();
   const { quill, quillRef } = useQuill();
-  const [value, setValue] = useState("");
+  const [boxValue, setBoxValue] = useState("");
+  const [profileInfo, setProfileInfo] = useState<InputDataType>({
+    name: "",
+    mobile: "",
+    district: "",
+    gender: "",
+    dateOfBirth: "",
+    experience: "",
+    youTubeLink: "",
+    about: "",
+  });
 
   useEffect(() => {
     if (quill) {
       quill.on("text-change", () => {
-        setValue(quillRef.current.firstChild.innerHTML);
+        setBoxValue(quillRef.current.firstChild.innerHTML);
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line
   }, [quill]);
 
-  const handleChangeInput = (e: any) => {};
+  const handleChangeInput = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ): void => {
+    setProfileInfo({
+      ...profileInfo,
+      [e.target.name]: e.target.value,
+    });
+  };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    profileInfo.about = boxValue;
   };
 
-  console.log(value);
-
+  console.log(profileInfo);
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -46,6 +71,7 @@ const InstructorProfileCreate = () => {
                 <input
                   className="block w-full bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   value="Instructor Name"
+                  name="name"
                   disabled
                 />
               </div>
@@ -58,6 +84,7 @@ const InstructorProfileCreate = () => {
                 <input
                   className="block w-full bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   value={"+8801795443674"}
+                  name="mobile"
                   disabled
                 />
               </div>
@@ -99,7 +126,7 @@ const InstructorProfileCreate = () => {
                 <select
                   required
                   className="block appearance-none w-full bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  name="district"
+                  name="gender"
                   onChange={handleChangeInput}
                 >
                   <option value="">Select</option>
@@ -126,7 +153,9 @@ const InstructorProfileCreate = () => {
                 <input
                   required
                   className="block w-full bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  name="dateOfBirth"
                   type="date"
+                  onChange={handleChangeInput}
                 />
               </div>
             </div>
@@ -135,7 +164,11 @@ const InstructorProfileCreate = () => {
                 Experience
               </label>
               <div className="relative">
-                <select className="block w-full bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500">
+                <select
+                  className="block w-full bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  name="experience"
+                  onChange={handleChangeInput}
+                >
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -164,6 +197,8 @@ const InstructorProfileCreate = () => {
                   className="block w-full bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   required
                   type="text"
+                  name="youTubeLink"
+                  onChange={handleChangeInput}
                   placeholder="Ex- https://www.youtube.com/watch?v=hhNas00-t60"
                 />
               </div>
