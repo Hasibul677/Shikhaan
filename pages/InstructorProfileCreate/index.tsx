@@ -1,14 +1,34 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 const address = require("@bangladeshi/bangladesh-address");
+import { useQuill } from "react-quilljs";
+import "quill/dist/quill.snow.css";
+import parse from "html-react-parser";
+
+
+
 
 const InstructorProfileCreate = () => {
   const disticts = address.allDistict();
+  const { quill, quillRef } = useQuill();
+  const [value, setValue] = useState("");
+
+  useEffect(() => {
+    if (quill) {
+      quill.on("text-change", () => {
+        setValue(quillRef.current.firstChild.innerHTML);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [quill]);
 
   const handleChangeInput = (e: any) => {};
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
   };
+
+  console.log(value);
+
   return (
     <div>
       <form onSubmit={handleSubmit}>
@@ -130,6 +150,48 @@ const InstructorProfileCreate = () => {
               </div>
             </div>
           </div>
+        </div>
+        {/* Link */}
+        <div className="mx-3">
+          <h1 className="text-xl font-bold text-green-600 my-3">Link</h1>
+          <div className="border rounded py-6">
+            <div className="w-full px-3 md:my-2 md:mb-0">
+              <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold my-2">
+                YouTube Video URL
+              </label>
+              <div className="relative">
+                <input
+                  className="block w-full bg-gray-100 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  required
+                  type="text"
+                  placeholder="Ex- https://www.youtube.com/watch?v=hhNas00-t60"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* About me */}
+        <div className="mx-3 mb-10">
+          <h1 className="px-3 text-xl font-bold text-green-600 my-3">
+            About me
+          </h1>
+          <div className="rounded h-52">
+            <div ref={quillRef} />
+          </div>
+        </div>
+        {/* <div>{parse(value)}</div> */}
+
+        {/* Profile Picture */}
+        <div className="mx-3 text-center my-5">
+          <h1 className="px-3 text-sm font-bold text-green-600 mb-3 md:mt-16 mt-28">
+            Profile Picture
+          </h1>
+          <input
+            type="file"
+            name="profileImg"
+            className="block m-auto py-5 md:py-10 pl-10 text-gray-900 bg-gray-50 rounded-lg border border-gray-300"
+            onChange={handleChangeInput}
+          />
         </div>
 
         <div className="flex justify-center mx-2 my-8 md:mx-0">
